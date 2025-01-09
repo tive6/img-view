@@ -20,7 +20,8 @@
     "build": "vite build",
     "preview": "vite preview",
     "fmt": "prettier --write '**/*.{jsx,js,json,css,scss,md}'",
-    "zip": "npm run build && node src/zip.js"
+    "zip": "npm run build && node src/zip.js",
+    "git": "tive git -c tive.git.config.cjs"
   },
   "dependencies": {
     "@arco-design/web-react": "^2.65.0",
