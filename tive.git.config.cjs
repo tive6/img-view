@@ -9,6 +9,6 @@ module.exports = {
     'git pull origin master',
     'git push origin master',
     // 'git merge --no-ff -m "clue-now merge into master" test',
-    // 'npm run push',qq
+    // 'npm run push',
   ],
 }

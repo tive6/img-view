@@ -1,7 +1,7 @@
 {
   "name": "img-view",
-  "displayName": "ImgView",
-  "version": "1.0.0",
+  "displayName": "Img View",
+  "version": "1.0.1",
   "author": "zmer",
   "description": "ImgView is a simple image viewer extension for Chrome",
   "type": "module",

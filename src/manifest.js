@@ -1,7 +1,7 @@
 import { defineManifest } from '@crxjs/vite-plugin'
 
 import { description, displayName, name, version } from '../package.json'
-import { fileProtocols, httpProtocols } from './common/config.js'
+import { fileProtocols } from './common/config.js'
 const isDev = process.env.NODE_ENV === 'development'
 const projectName = displayName || name
 
@@ -27,7 +27,7 @@ export default defineManifest({
   },
   content_scripts: [
     {
-      matches: ['http://*/*', 'https://*/*'],
+      matches: ['http://*/*', 'https://*/*', 'file:///*/*'],
       js: ['src/contentScript/index.js'],
     },
   ],
@@ -46,10 +46,11 @@ export default defineManifest({
     'scripting',
     'webRequest',
     'sidePanel',
+    'storage',
   ],
   host_permissions: [
     //
     ...fileProtocols,
-    ...httpProtocols,
+    // ...httpProtocols,
   ],
 })
