@@ -1,7 +1,7 @@
 import { defineManifest } from '@crxjs/vite-plugin'
 
 import { description, displayName, name, version } from '../package.json'
-import { fileProtocols } from './common/config.js'
+import { fileProtocols, httpProtocols } from './common/config.js'
 const isDev = process.env.NODE_ENV === 'development'
 const projectName = displayName || name
 
@@ -51,6 +51,6 @@ export default defineManifest({
   host_permissions: [
     //
     ...fileProtocols,
-    // ...httpProtocols,
+    ...httpProtocols,
   ],
 })

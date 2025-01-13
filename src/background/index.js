@@ -1,4 +1,4 @@
-import { fileProtocols } from '@/common/config.js'
+import { fileProtocols, httpProtocols } from '@/common/config.js'
 import { formatBytes } from '@/common/helper.js'
 
 chrome.sidePanel.setOptions({
@@ -33,7 +33,7 @@ async function injectScript({ tabId, url }) {
         })
       })
       clearTimeout(t)
-    }, 200)
+    }, 100)
 
     // await chrome.scripting.executeScript({
     //   target: { tabId: tabId },
@@ -49,8 +49,11 @@ async function injectScript({ tabId, url }) {
 async function getImgSize(url) {
   try {
     let res = await fetch(url, {
-      method: 'HEAD', // 只请求头部信息
-    }).then((res) => res.blob())
+      method: 'GET', // 只请求头部信息
+    }).then((res) => {
+      // console.log(res)
+      return res.blob()
+    })
     return res?.size || 0
   } catch (e) {
     console.log(e)
@@ -61,18 +64,20 @@ async function getImgSize(url) {
 !(async function main() {
   try {
     chrome.webRequest.onCompleted.addListener(
-      (details) => {
+      async (details) => {
         // let tab = await chrome.tabs.get(details.tabId)
-        // console.log(tab)
-        if (details.frameId === 0 && details.parentFrameId === -1) {
-          console.log(details)
+        // console.log('tab', tab)
+        // console.log('details', details)
+        if (!details?.documentId && details.frameId === 0 && details.parentFrameId === -1) {
+          console.log('details', details)
           injectScript(details)
         }
       },
       {
         urls: [
+          //
           ...fileProtocols,
-          // ...httpProtocols,
+          ...httpProtocols,
         ],
         types: [
           'main_frame',

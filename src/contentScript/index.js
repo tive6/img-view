@@ -1,5 +1,3 @@
-import { debounce } from '../common/helper.js'
-
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   // console.log('message', message)
   // console.log(sender, sendResponse)
@@ -19,27 +17,36 @@ function Init({ imgUrl, fileSize, favicon, eid }) {
   if (!image) return
   image.id = 'image'
 
-  let count = 0
-  let t = setInterval(() => {
-    count = 0
-  }, 500)
+  let run = closeable()
 
-  document.addEventListener(
-    'keydown',
-    debounce((e) => {
-      if (e.key === 'Escape') {
-        count++
-        if (count >= 2) {
-          chrome.runtime.sendMessage({
-            type: 'IMG_TAB_CLOSE',
-            details: 1,
-          })
-        }
-      }
-    }, 200),
-  )
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      run()
+    }
+  })
 
   initViewer(image, fileSize)
+}
+
+function closeable() {
+  let counter = 0
+  let t = null
+  function reset() {
+    t = setTimeout(() => {
+      clearTimeout(t)
+      counter = 0
+    }, 500)
+  }
+  return () => {
+    counter++
+    if (counter >= 2) {
+      chrome.runtime.sendMessage({
+        type: 'IMG_TAB_CLOSE',
+        details: 1,
+      })
+    }
+    reset()
+  }
 }
 
 function setFavicon(favicon) {
@@ -54,6 +61,7 @@ function initViewer(ele, fileSize) {
   new Viewer(ele, {
     inline: true,
     navbar: false,
+    button: false,
     title: [
       1,
       (image, imageData) =>
@@ -72,6 +80,7 @@ function initViewer(ele, fileSize) {
       flipHorizontal: 4,
       flipVertical: 4,
     },
+    fullscreen: false,
     viewed() {
       // viewer.zoomTo(1)
     },
