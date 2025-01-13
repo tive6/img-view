@@ -46,7 +46,6 @@ export default defineManifest({
     'scripting',
     'webRequest',
     'sidePanel',
-    'storage',
   ],
   host_permissions: [
     //
