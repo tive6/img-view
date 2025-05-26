@@ -66,10 +66,13 @@ async function getImgSize(url) {
     chrome.webRequest.onCompleted.addListener(
       async (details) => {
         // let tab = await chrome.tabs.get(details.tabId)
-        // console.log('tab', tab)
-        // console.log('details', details)
         if (!details?.documentId && details.frameId === 0 && details.parentFrameId === -1) {
-          console.log('details', details)
+          // if (
+          //   details.type === 'main_frame' &&
+          //   details.responseHeaders.some(
+          //     (h) => h.name === 'content-type' && h.value.startsWith('image/'),
+          //   )
+          // ) {
           injectScript(details)
         }
       },
@@ -82,9 +85,11 @@ async function getImgSize(url) {
         types: [
           'main_frame',
           // 'sub_frame',
-          'image',
+          // 'image',
+          // 'media',
         ],
       },
+      ['responseHeaders', 'extraHeaders'],
     )
   } catch (e) {
     console.log(e)

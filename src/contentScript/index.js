@@ -1,10 +1,31 @@
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
   // console.log('message', message)
   // console.log(sender, sendResponse)
   if (message.type === 'IMG_VIEWER_MSG') {
     Init(message.details)
   }
+  // if (message.type === 'CHECK_IMG_MSG') {
+  //   console.log('message', message)
+  //   let isImg = await isImageLink(message.details.url)
+  //   sendResponse({ isImg })
+  //   return true
+  // }
 })
+
+async function isImageLink(url) {
+  return new Promise((resolve) => {
+    const img = new Image()
+    img.onload = function () {
+      console.log('image loaded')
+      resolve(true)
+    }
+    img.onerror = function () {
+      console.log('image error')
+      resolve(false)
+    }
+    img.src = url
+  })
+}
 
 // let eid = chrome.runtime.id
 
